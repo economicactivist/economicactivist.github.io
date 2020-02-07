@@ -1,0 +1,435 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Generic Page - Massively by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Massively</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li><a href="index.html">Main</a></li>
+							<li class="active"><a href="generic.html">Project One</a></li>
+							<li><a href="elements.html">Elements Reference</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									
+									<h1>Data Insights from a<br />
+										Learning Management System</h1>
+									<p>In this project, I explore and perform analysis on data collected from groups of students who used 
+										a learning management system called Kalboard360&reg.</p>
+								</header>
+								<div class="image main"><img src="images/learn-977545_1920.png" alt="" /></div>
+								<p>In this project, I explore and perform analysis on data collected from an international groups of students who used the learning management system (LMS), Kalboard360&reg, to complete curricular requirements.  Data collection was facilitated by the LMS’s communication with xAPI, which functions a learner activity tracker tool.   I obtained access to this data set by searching using the keywords “learning management system” and “education” on Google Dataset Search which, in turn, linked to a Kaggle webpage that proved the dataset conveniently in csv format.  I am grateful to have found this dataset because at the moment there doesn’t appear to be many similar datasets available for public use.  As I progress in my development as a data scientist with a strong focus on e-learning, I hope to be able improve my abilities in regards to finding niche data. With the many LMS services that are available these days, proprietary concerns are naturally a challenge. </p>
+
+<p>On Kaggle, the dataset is called “Student Academic Performance”, and corresponds to two studies found in the reference list at the bottom on this article.  I purposely avoided reading these studies before analyzing the data to avoid creating a bias that may lead to replicating the studies’ results or seeing the results of those studies as the standard by which I evaluate my own results.  </p>
+
+<p>Now, for the interesting part, actually diving into the data.  </p>
+
+<p>Data science process often begins with trying to get the data into a useful form.  Next, it is common to perform exploratory data analysis (EDA) to get a feel of the data.  Thanks to Datacamp’s Data Scientist in Python career track, Kevin Markham’s tutorials, as well as the many toy datasets I’ve played with independently before enrolling in Lambda School’s intense Data Science program, I have lots of experience using the pandas library to clean and manipulate datasets. However, familiarity with pandas only removes the pangs of syntax and google searching; it does not diminish the requisite higher-order thinking involved with asking the right questions with a new dataset. Luckily, I’m passionate about the role data analytics in the future of education, so such questions feel like more of an opportunity than a burden when analyzing data extracted from learning events.</p>
+
+<p>I have no knowledge of the extent to which the Student Academic Performance dataset was cleaned prior to being uploaded to Kaggle, but it was mostly free of annoyingly tedious but not prohibitive features such as large proportions of null values, redundant columns (e.g. columns that measure the same thing but in different units), leading and trailing spaces (with one exception), columns with mostly zeros, name columns where the family name is not clearly discernable, etc.  However, there were still a few preparatory steps that had to be taken to get the data in a form that allowed me to work with it comfortably. I’ve laid out the data-cleaning process below on the dataset I named “edu_data”. </p>
+
+<h2>Data Cleaning</h2>
+<h3>Problem: Some column names have leading and trailing spaces </h3>
+
+<div class="flexContainer">
+	<img src="B_images/Picture1.png" alt="" />
+</div>
+
+
+	
+ 
+<h3>Solution: Use a combination of str.strip() to remove leading/trailing spaces and str.replace() to replace underscores. </h3>
+<div class="flexContainer"><img src="B_images/Picture2.png" alt="" /></div>
+
+ 
+<p>The above step is particularly useful for people who prefer dot notation (e.g, df.col_name) over bracket notation (df[‘col name’] ). </p>
+
+<h3>Problem: Gender has four categories (caused by trailing commas): </h3>
+<div class="flexContainer><img src="B_images/Picture3.png" alt="" /></div>
+
+ 
+<h3>Solution: Use str.replace()</h3>
+<div class="flexContainer"><img src="B_images/Picture4.png" alt="" /></div>
+
+ 
+
+<h3>Problem: Country names are in different cases and some are misspelled </h3>
+<div class="flexContainer"><img src="B_images/Picture5.png" alt="" /></div>
+
+ 
+<h3>Solution: use a dictionary inside the Series.replace() method<h3>
+<div class="flexContainer"><img src="B_images/Picture6.png" alt="" /></div>
+
+ 
+
+<h3>Problem: One student (in row 32) has conflicting data for Educational Stage.  This can be first seen grouping Educational Stages by grade level. </h3>
+<div class="flexContainer"><img src="B_images/Picture7.png" alt="" /></div>
+
+ 
+<p>Inferring from the groups, as student can’t be both in primary school (“lowerlevel”) and be in Grade 7 (“G-07”).    I think it would be better to locate and then drop the row rather than speculate on which category is incorrect.</p>
+<p>Locating row: </p>
+<div class="flexContainer"><img src="B_images/Picture8.png" alt="" /></div>
+
+ 
+<p>Dropping row: </p>
+<div class="flexContainer"><img src="B_images/Picture9.png" alt="" /></div>
+
+ 
+<p>I reset the index because dropping the row will cause the dataframe to have an index that skips from 31 to 33.  This is not always a problem but it can be in some situations so resetting the index after dropping rows is a good just-in-case practice. </p>
+<h3>Problem: The column “Student Absence Days” has two categories: “under-7” and “above-7”.  Technically, this does not include missing exactly seven days. Looking at the column descriptions from the Kaggle site, one notes: </h3>
+<em>The data set includes also the school attendance feature such as the students are classified into two categories based on their absence days: 191 students <strong>exceed 7 absence days</strong> and 289 students their absence days under 7.</em>
+<p>Not much help and I think the confusion may be a simple translation issue.  However, I decided to change “Under 7” to “7 or less”.  This may be considered an arbitrary choice but my rationale is that there is a larger range of numbers greater than seven and less than the total number of semester days than there are for the seven days leading to the threshold between “Under” and “Above”.  Thus, there is greater potential for information loss by categorizing Under-7 to only mean 6 days while there is plausibly much less information loss by subtracting one day from the larger range of total absence days over a week. </p>
+<h3>Solution:</h3>
+<div class="flexContainer"><img src="B_images/Picture10.png" alt="" /></div>
+
+ 
+<h3>Other minor corrections:</h3>
+<ul>
+<li>renamed the "Total" column to "Academic Performance"</li>
+<li>dropped a row that had a number instead of category</li> 
+<li>renamed "Mom" to "Mother" to match the formality of “Father” in the “Parent responsible for student” column </li>
+<li>dropped two rows with ambiguous data</li>
+</ul>
+<h2>Exploratory Data Analysis</h2>
+<p>Cleaning the data was about as fun as one can expect cleaning anything to be, but it is a necessary part of the DS process-- with some estimating data cleaning being ___% of the DS workflow in terms of total time spent. </p>
+<p>Now we move into exploratory data analysis (EDA). One awesome way to get a quick visual feel for a data set in pandas is to use a pair plot.  Pair plots allow us to see the relationship, if any, of different variables in our data set graphed <strong>all at once</strong>. Thanks to the seaborn package, this is a simple task </p>
+<div class="flexContainer"><img src="B_images/Picture11.png" alt="" /></div>
+ 
+<div class="flexContainer"><img src="B_images/Picture13.png" alt="" /></div>
+
+ 
+
+<p> All numerical variables in edu_data are extracted and plot against each other for quick insights.  With the scatterplots, the data points seem mostly spread out (and some sort of correlation statistical technique would have to be applied to try to quantify any relationships).  Along the diagonal, however, we see histograms that show that there the variables  <strong>do not appear to be normally distributed</strong>.  I drew a read line over these distributions to show that they are <strong>bimodal</strong>. Bimodal distributions can provide important information about<a href=”https://documentation.statsoft.com/STATISTICAHelp.aspx?path=Glossary/GlossaryTwo/B/BimodalDistribution”> the nature of an investigated variable</a>. Bimodality can indicate polarization of opinions, non-homogenous data, or problems with the measurement instrument.
+<p>In this case, I think the modality may stem from using non-homogenous data.  I will experiment with different hues to determine which underlying distributions are the source of the peaks.</p>
+<p>At first I thought the bimodality may be due to gender differences.  That is, the mean of the male gender group might differ significantly from the mean of the female gender group.  However, even without performing a t-test, we can see the fallacy of this hypothesis below:</p>
+<div class="flexContainer"><img src="B_images/Picture14.png" alt="" /></div>
+
+<p>Excluding the distribution of “Viewing announcements”, we see that the variables remain bimodal regardless of gender.  This meant I had to keep trying different categorical variables.</p>
+
+<h3>But I’ll skip to the ones that were useful</h3>
+
+<div class="flexContainer2"><img src="B_images/Picture16.png" alt="" /><img src="B_images/Picture17.png" alt="" /></div>
+
+
+<h3>Bimodality appears explained by both number of days absent and academic performance.</h3>
+<p>After some experimentation, it seem that grouping the samples into categories indicating their academic performance or number of days absent does a better job of explaining the modality of the graphs than other features.  On average, based on the graphs, lower-performing students raised their hands, viewed announcements, and viewed resources <strong>less</strong> than mid- to high-performing students.</p>
+
+<p>The same comparison can be made concerning students with more than 7 days absent.  Participation in discussion groups, however, appears to be more evenly spread between groups. This could mean that frequency of participation in discussion groups, as a simple metric, offers little information about the how well students understands the material.</p>
+
+<p>To support this interpretation with some actual numbers, I'll find the mean and standard deviation of variables both groups.</p>
+
+<h3>Mean and Standard Deviation of Continuous Variables based on Academic Performance</h3>
+<div class="flexContainer"><img src="B_images/Picture18.png" alt="" /></div>
+
+ 
+
+<h3>Mean and Standard Deviation of Continuous Variables based on Absenteeism</h3>
+<div class="flexContainer"><img src="B_images/Picture19.png" alt="" /></div>
+
+
+
+ 
+The similarity in standard deviations between both sub-groups (Days_absent and Academic Performance) could mean that <strong>the frequency of participation in discussion groups, as a simple metric, offers little information about the how well a student understands the material.</strong>
+
+However, this hypothesis requires stronger statistical support. I will attempt to address this hypothesis eventually, but there are two  pressing issues regarding drawing conclusions from this dataset. 
+<ol>
+<li>
+How do I determine the relationship between continuous and categorical variables? <br/><em>What would be a more statistically rigorous way of explaining, for example, the potential correlation between the frequency of raising one's hand (continuous) and academic performance (categorical)?</em><br/><br/>
+</li>
+<li>
+The bimodality suggests that I should split the dataset into two separate dataframes. But which should I choose?<br/>
+<ul>
+<li>
+  Two dataframes based on academic 
+performance (i.e., combining middle and high performers) <strong>or</strong><br/>
+</li>
+<li>
+  Two dataframes based on absenteeism 
+</li>
+</ul>
+</ol>
+
+<p>Before tackling these concerns, I will first determine the correlation of numerical variables in the dataset.  This is a more straightforward process than trying to find numerical-to-categorical and categorical-to-categorical correlation. Below I will use Seaborn and panda’s corr() methods to calculate the Pearson <em>r</em> and Spearman <em>rho</em>  coefficient for the continuous variables of edu_data</p>
+
+<h3>Looking for possible correlations between continuous variables using the Pearson and Spearman coefficients</h3>
+<div class="flexContainer2"><img src="B_images/Picture20.png" alt="" /><img src="B_images/Picture21.png" alt="" /></div>
+
+
+<div class="flexContainer"><img src="B_images/Picture22.png" alt="" /></div>
+ 
+<div class="flexContainer2"><img src="B_images/Picture23.png" alt="" /><img src="B_images/Picture24.png" alt="" /></div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="flexContainer"><img src="B_images/Picture25.png" alt="" /></div>
+
+ 
+
+
+
+
+
+<h3>moderately strong correlations between three continuous variables</h3>
+
+
+<p>Raising hands, viewing announcements, and visiting resources have strong correlations (between different pairs).  Maybe these factors can be combined or examined separately for comparison with Academic Performance.</p>
+
+<p>An interesting observation is that <strong>the correlation between the frequency that students raise their hands in class and the frequency of participation in discussion groups is not very strong</strong>. This may be because student participation may not be adequately proxied by how often students raise their hands.  Students raise their hands both to ask questions and to give answers.  So students who are having trouble understanding may be mixed with students who are demonstrating understanding.  Conversely, students who participate often in the non-virual classroom may not necessarily find online discussions to be as stimulating.  These are of course, only two of many hypotheses that derived from the complexity of interpreting learning metrics. Additionally,</p> 
+<ol>
+<li>Correlation does not imply causation</li>
+<li>Determining the threshold for a useful correlation coefficient is often a judgement call. Notably, none of the coefficients in the pearson or spearman correlation matrices are above 0.8.</li>
+</ol>
+
+<h3>Looking for possible correlations between categorical variables using the Cramer's V coefficient
+</h3>
+
+
+<p>Cramer's V is a statistical technique used to calculate associations between categorical variables. It is preferable to simply using χ<super><small>2</small></super> because the coefficient provides more information about the strength of correlation.</p>
+
+<p>To minimize the coding necessary to arrive at Cramer's V, I'll be using the <a href=”https://github.com/shakedzy/dython/blob/master/dython/nominal.py”> dython</a> package to plot categorical associations.</p>
+
+I also benefited tremendously from the explantion of Cramer's V found <a href=https://towardsdatascience.com/the-search-for-categorical-correlation-a1cf7f1888c9>here</a>. 
+
+<p>First off, I had to do some pip installing</p>
+<div class="flexContainer"><img src="B_images/Picture26.png" alt="" /></div>
+
+ 
+<div class="flexContainer"><img src="B_images/Picture27.png" alt="" /></div>
+
+ 
+
+<p>Next I had to make a subset of edu_data that only contained categorical variables.  Luckily, all the non-numerical columns were categorical, so filtering was simple.</p>
+<div class="flexContainer"><img src="B_images/Picture28.png" alt="" /></div>
+
+
+ 
+
+<p>Next I imported dython and used the below code to plot a Cramer’s V matrix</p>
+<div class="flexContainer"><img src="B_images/Picture29.png" alt="" /></div>
+
+ 
+<div class="flexContainer"><img src="B_images/Picture30.png" alt="" /></div>
+
+
+ 
+
+
+<h3> Days Absent and Academic Performance have the highest <em>non-trivial</em> association.</h3>
+
+<p>The above matrix was very useful helping me find categorical associations. Nevertheless, a drawback to using Cramer's V is that its output is symmetric.  In other words, there is no way to tell if absenteeism provides more information about academic performance than academic provides about absenteeism. Using mathematical notation to describe this symmetry </p>
+
+<p>Cramer's V: V(x,y)=V(y,x)</p>
+<div class="flexContainer"><img src="B_images/Picture32.png" alt="" /></div>
+
+ 
+<p>To address this downsides of this symmetry, I'll use the Uncertainty Coefficient, also known as Theil's U.  Thanks to the dython package, calculating Theil's U coefficients is just a matter of chaning the "theil_u" parameter of the associations function to "True"</p>
+<div class="flexContainer"><img src="B_images/Picture33.png" alt="" /></div>
+
+
+
+<div><img src="B_images/Picture34.png" alt="" /></div>
+
+
+ 
+ 
+
+
+<div class="flexContainer"><img src="B_images/Picture35.png" alt="" /></div>
+
+ 
+
+
+<h3>Absenteeism provides more information</h3>
+
+<p>With a coefficient of <strong>.41</strong>, we now see that absenteeism ("Days Absent")provides more information about Academic Performance than Academic Performance provides about absenteeism <strong>.26</strong>. In other words, reviewing students’ attendance records <strong>will provide more information about their academic performance</strong> than looking at the their academic performance first and then trying to infer their attendance record.</p> 
+
+<p>Now that I have found what correlations between numerical variables and associations between categorical variables, it would be great to be able to find associations between numerical and categorical variables--such as my earlier example of comparing frequency of hand-raising to academic performance.  Such mix-matched comparisons can be achieved by yet another statistical technique: The correlation ratio. </p>
+
+<p>Like Theil's U, the <strong>correlation ratio</strong> also assumes asymmetry, so there is less information loss when looking at the association between variables. The correlation ratio can be considered the <a href=https://dictionary.apa.org/correlation-ratio> nonlinear equivalent of the correlation coefficient.</a> Because there is no direct way to linearly plot categorical and numerical variables (how would "gender" for example, fit on a number line?) without manipulation, the correlation ratio can be used to infer association. </p>
+
+<p><strong>Note</strong>: This isn't the only way to compare categorical and numerical variables. In fact, there is an intriguing paper about using new coefficient, φ<sub>K</sub>, for non-linear variable comparisons published on Cornell's open archive <a href=https://arxiv.org/pdf/1811.11440.pdf> here.</a>
+	<p>In order to use the <em>correlation_ratio</em> function from the dython package, I need to separate continuous data columns into their own dataframe.  I can then use the <strong>a single column</strong> from the categorical dataframe I made earlier (edu_categorical_data) as the first parameter of <em>correlation_ratio</em> and <strong>a single column</strong> from the numerical dataframe as the second parameter</p>
+
+	<div class="flexContainer"><img src="B_images/Picture36.png" alt=""></div>
+	<p>The correlation ratio answers the question:</p>
+
+	<h3>Given a continuous number, how well can you know to which category it is associated?* <small>(Zychlinski, 2018 [<em>paraphrased</em>])</small></h3>
+	
+	<p>According to the ratio, we can see that raising hands in class is not strongly associated with gender.</p>
+	
+	<p>But wait! I do not want to go through the tedious process of a column into each parameter of the correlation_ratio function and recording the result.  This means that I need to <strong>make a custom function</strong> to do it for me. </p>
+	<div class="flexContainer"><img src="B_images/Picture37.png" alt=""></div>
+
+	<p>Then, the process of feeding the returned list to a dataframe is straightforward (and could technically be refactored to be part of the custom function).</p>
+	<div class="flexContainer"><img src="B_images/Picture38.png" alt=""></div>
+
+	<p>Thus, as seen in the dataframe above, in theory, if I were to pick a number from the "Raised hand" column, I could determine if that number belongs to a specific category of "Academic Performance" ("Low-level", "Middle-level", or "High-level") with greater certainty than if I were to choose the same number from "Raised hand" and attempted to categorize it correctly under "Days Absent". </p> 
+	<hr/>
+	<h2>Processing the data to gain insights</h2>
+<h3><em>Running a Random Forest Classifier on the full dataset</em></h3>
+
+<p>Previously, we were only concerned with the relationship between variables without choosing a specific variable of interest.  This variable of interest is often called the "dependent" or "target" variable. </p> 
+
+<p>Because an educator might be most concerned with learning outcomes, the "Academic Performance" is a good choice for a target variable. Even better, we can now use the dataset with an machine learning model from the sklearn library.</p>
+
+<p>A random forest model is great choice because, unlike many other machine learning models, it does not assume a normal distribution of the values of independent variables.  This means I can use a random forest model on the entire dataset without removing valuable information relating to groups who tend to pass versus students who tended to fail. </p> 
+
+<p>If we think back to the beginning of this data-driven journey, there was a persistent correlation between academic performance and abseteeism.  This could be seen both visually through a pairplot, but analytically by apply statistical formulas.  If we seperate the dataframe into two subsets in order to make distribution of variables more Gaussian, we lose information on how to predict a students academic performance. </p>
+
+<p>Conveniently, using a random forest model means I do not have to standardize the continuous variables or apply principal component analysis beforehand </p>
+
+<h3> Enough talk, let's apply a random forest classifier to the dataset </h3>
+
+	<div class="flexContainer"><img src="B_images/Picture39.png" alt=""></div>
+	<p>Let's also create a customer function that makes use of the <em>.feature_importances_</em> attribute in order to create a dataframe that allows us to view the ranking of variables used for prediction</p>
+	<div class="flexContainer"><img src="B_images/Picture40.png" alt=""></div>
+	<h2>Model Observation 1:</h2>
+
+	<p>The accuracy of the model in predicting academic performance is around <strong>80%</strong>.  Even more interestingly, we see that the model determined that <strong>visiting resources, raising hands, and viewing annoucements</strong> are better predictors of academic performance than absenteeism.</p>  
+	
+	<p>The top three features are ranked in <strong>the same order of importance as the relationships provided by the correlation ratio function we defined</strong></p>
+	<hr/>
+	<p>To confirm that separating the dataframes could negatively affect the predictive accuracy of the RF model, I will apply the model to two subsets of the dataframe: High absense (HA) and low absence (LA)</p>
+	<div class="flexContainer"><img src="B_images/Picture41.png" alt=""></div>
+	
+	<h2>Model Observation 2:</h2>
+	<p>The model accuracy is <em>slightly</em> higher (81.5%) for the high-absense dataframe. </p>
+
+	<div class="flexContainer"><img src="B_images/Picture43.png" alt=""></div>
+	<h2>Model Observation 3: </h2>
+
+<p>Going through the same process, the model accuracy is much lower the low-absenteeism group</p>
+
+	<div class="flexContainer"><img src="B_images/Picture44.png" alt=""></div>
+	<h2>Final thoughts</h2>
+
+<p>There is much more than can be done to try to extract a better accuracy rate such as hypertuning parameters, but so far this dataset allows us to make two general statements about what the fitted RF model and prior EDA suggest</p>
+<ol>
+<li>
+It's more difficult to predict the academic peformance of a students with low absenteeism than high abseeteeism.</li>
+<li>
+Visiting resources, viewing announcements, and raising hands are not only correlated with each other (as seen from the <strong> pearson's r and spearman's rho coefficients</strong>, but these three variables are also strongly predictive of academic performance (as seen in the <strong>correlation ratio table and the highest ranked features </strong>of the fitted random forest models.  </li>
+</ol>
+	<!-- <div class="flexContainer"><img src="B_images/Picture45.png" alt=""></div>
+	<div class="flexContainer"><img src="B_images/Picture46.png" alt=""></div>
+	<div class="flexContainer"><img src="B_images/Picture47.png" alt=""></div>
+	<div class="flexContainer"><img src="B_images/Picture48.png" alt=""></div> -->
+
+
+<h3>References</h3>
+<p>Amrieh, E. A., Hamtini, T., & Aljarah, I. (2016). Mining Educational Data to Predict Student’s academic Performance using Ensemble Methods. International Journal of Database Theory and Application, 9(8), 119-136.</p>
+<p>Amrieh, E. A., Hamtini, T., & Aljarah, I. (2015, November). Preprocessing and analyzing educational data set using X-API for improving student's performance. In Applied Electrical Engineering and Computing Technologies (AEECT), 2015 IEEE Jordan Conference on (pp. 1-5). IEEE.</p>
+
+
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section>
+						<section class="split contact">
+							<section class="alt">
+								<h3>Address</h3>
+								<p>1234 Somewhere Road #87257<br />
+								Nashville, TN 00000-0000</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(000) 000-0000</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">info@untitled.tld</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
